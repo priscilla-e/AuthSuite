@@ -2,10 +2,15 @@
 import styles from "../form.module.css";
 import Image from "next/image";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
-import {  useState } from "react";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  
+  const handleGoogleSignIn =  async () => {
+    signIn("google", { callbackUrl: "/"});
+  }
 
   return (
     <form className="flex flex-col gap-5">
@@ -39,7 +44,7 @@ export default function LoginForm() {
         <button type="submit">Login</button>
       </div>
       <div>
-        <button type="button" className={styles.oauth}>
+        <button type="button" className={styles.oauth} onClick={handleGoogleSignIn}>
           Sign In with Google
           <Image src="/images/google.svg" width="20" height="20" alt="icon" />
         </button>
