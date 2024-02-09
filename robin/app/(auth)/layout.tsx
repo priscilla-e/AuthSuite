@@ -1,8 +1,6 @@
 
 import styles from "./layout.module.css";
 
-console.log(styles);
-
 import { PropsWithChildren } from "react";
 
 export default function AuthLayout({children}: PropsWithChildren) {
@@ -14,7 +12,7 @@ export default function AuthLayout({children}: PropsWithChildren) {
           <div className={styles.cloud_one}></div>
           <div className={styles.cloud_two}></div>
         </div>
-        <div className="flex flex-col justify-evenly bg-gray-500">
+        <div className="flex flex-col justify-evenly">
           <div className="text-center py-10">{children}</div>
         </div>
       </div>
