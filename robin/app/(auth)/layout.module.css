@@ -1,0 +1,42 @@
+.image_container {
+  @apply bg-gradient-to-r from-blue-500 to-indigo-500 rounded-l-md relative overflow-hidden;
+}
+
+.cartoon {
+  background: url("/images/img2.png") no-repeat;
+  background-position: 65% 100px;
+  @apply absolute inset-0 w-full h-full bg-cover z-10;
+}
+
+.cloud_one {
+  background: url("/images/cloud_1.png") no-repeat;
+  animation: cloudOne 25.5s ease-in 5.9s infinite;
+  transform: translateX(290%);
+  @apply absolute top-[65%] left-[10%] w-[180px] h-[100px] bg-contain z-20
+}
+
+.cloud_two {
+  background: url("/images/cloud_2.png") no-repeat;
+  animation: cloudOne 18.2s ease-in .9s infinite;
+  transform: translateX(290%);
+  @apply absolute top-[49%] left-1/2 w-[200px] h-[100px] bg-contain z-0
+}
+
+/* keyframes */
+
+@keyframes cloudOne {
+  0% {
+    transform: translateX(290%);
+  }
+  100% {
+    transform: translateX(-250%);
+  }
+}
+@keyframes cloudTwo {
+  0% {
+    transform: translateX(160%);
+  }
+  100% {
+    transform: translateX(-250%);
+  }
+}
