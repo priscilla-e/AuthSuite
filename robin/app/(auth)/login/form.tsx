@@ -11,6 +11,9 @@ export default function LoginForm() {
   const handleGoogleSignIn =  async () => {
     signIn("google", { callbackUrl: "/"});
   }
+  const handleGithubSignIn =  async () => {
+    signIn("github", { callbackUrl: "/"});
+  }
 
   return (
     <form className="flex flex-col gap-5">
@@ -44,14 +47,22 @@ export default function LoginForm() {
         <button type="submit">Login</button>
       </div>
       <div>
-        <button type="button" className={styles.oauth} onClick={handleGoogleSignIn}>
+        <button
+          type="button"
+          className={styles.oauth}
+          onClick={handleGoogleSignIn}
+        >
           Sign In with Google
           <Image src="/images/google.svg" width="20" height="20" alt="icon" />
         </button>
       </div>
       <div>
-        <button type="button" className={styles.oauth}>
-          Sign In with Github{" "}
+        <button
+          type="button"
+          className={styles.oauth}
+          onClick={handleGithubSignIn}
+        >
+          Sign In with Github
           <Image src="/images/github.svg" width="25" height="25" alt="icon" />
         </button>
       </div>

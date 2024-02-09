@@ -7,10 +7,10 @@ export default async function Home() {
   // Accessing the session from the server side (sever components & routes)
   const session = await getServerSession(authOptions);
 
+  console.log(session)
   return (
     <>
       <Header />
-
       <main className="container mx-auto text-center py-20">
         <h3 className="text-2xl">
           Welcome to <span className="text-indigo-500">Robin!</span>

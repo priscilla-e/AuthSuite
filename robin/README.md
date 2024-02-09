@@ -24,8 +24,19 @@ Follow the following steps to set it up for the new App router.
 ```
 
 ### 2. Set up relevant Environment variables
+Assuming your are using Credendials Provider, OAuth Providers (Google and Github), your `.env.local` file should look like this:
+```text
+// .env.local
 
-Assuming your are using Credendials Provider, OAuth Providers (Google and Github)
+NEXTAUTH_SECRET=secret-key
+NEXTAUTH_URL=https://localhost:3000
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+```
+
+If you are not sure how to obtain these keys, i've tried my best to document it below:
 
 **NEXTAUTH_SECRET**  
 Run the following command on terminal.
@@ -46,15 +57,16 @@ Remember to add correct redirect URL in google
 * For production: `https://{YOUR_DOMAIN}/api/auth/callback/google`
 * For development: `http://localhost:3000/api/auth/callback/google`
 
-Your `.env.local` file should look like:
-```text
-// auth-options.ts
 
-NEXTAUTH_SECRET=secret-key
-NEXTAUTH_URL=https://localhost:3000
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-```
+**GITHUB_CLIENT_ID & GITHUB_CLIENT_SECRET**  
+Similar to the google OAuth process, Create a new github OAuth app:
+
+https://github.com/settings/apps
+
+
+For the Authorization callback URL field ente: 
+* `http://localhost:3000/api/auth/callback`
+
 
 ### 3. Define AuthOptions config file
 ```javascript
