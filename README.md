@@ -11,4 +11,5 @@ Robin is a Next.js application that utilizes the NextAuth authentication provide
 
 ### Technologies
 * `Next.js` + `TypeScript`
-
+* `NextAuth`
+* `TailwindCSS`
