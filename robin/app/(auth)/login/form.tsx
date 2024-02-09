@@ -4,10 +4,28 @@ import Image from "next/image";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useFormik } from "formik"
+ import * as Yup from "yup";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Email is required!"),
+      password: Yup.string()
+        .min(4, "Must be atleast 4 characters long!")
+        .required("Password is required!"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   const handleGoogleSignIn =  async () => {
     signIn("google", { callbackUrl: "/"});
   }
@@ -16,24 +34,29 @@ export default function LoginForm() {
   }
 
   return (
-    <form className="flex flex-col gap-5">
+    <form className="flex flex-col gap-5" onSubmit={formik.handleSubmit}>
       <div className={styles.input_group}>
         <input
+          id="email"
           type="email"
-          name="email"
           placeholder="Email"
           className={styles.input_text}
+          {...formik.getFieldProps("email")}
         />
         <span className="icon flex items-center px-4">
           <HiAtSymbol size={25} />
         </span>
       </div>
+      {formik.touched.email && formik.errors.email ? (
+        <span className="text-rose-500 text-sm">{formik.errors.password}</span>
+      ) : null}
       <div className={styles.input_group}>
         <input
+          id="password"
           type={showPassword ? "text" : "password"}
-          name="password"
           placeholder="Password"
           className={styles.input_text}
+          {...formik.getFieldProps("password")}
         />
         <span
           className="icon flex items-center px-4"
@@ -42,7 +65,9 @@ export default function LoginForm() {
           <HiFingerPrint size={25} />
         </span>
       </div>
-
+      {formik.touched.password && formik.errors.password ? (
+        <span className="text-rose-500 text-sm">{formik.errors.password}</span>
+      ) : null}
       <div className={styles.button}>
         <button type="submit">Login</button>
       </div>
