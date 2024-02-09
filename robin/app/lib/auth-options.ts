@@ -1,6 +1,8 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
+
 // import { PrismaAdapter } from "@next-auth/prisma-adapter";
 // import prisma from "@/prisma/client";
 
@@ -16,9 +18,16 @@ const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
+    // CredentialsProvider({
+    //   name: "Credentials",
+    //   async authorize(credentials) {
+        
+    //   }
+    // })
+    
   ],
-  session: {
-    strategy: "jwt",
+  pages: {
+    signIn: "/login", // intercept the default signIn route --- /api/auth/signin
   },
 };
 

@@ -1,13 +1,11 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth/next";
-import authOptions from "@/auth-options";
+import authOptions from "@/app/lib/auth-options";
 import Header from "./header";
 
 export default async function Home() {
   // Accessing the session from the server side (sever components & routes)
   const session = await getServerSession(authOptions);
 
-  console.log(session)
   return (
     <>
       <Header />
@@ -18,8 +16,6 @@ export default async function Home() {
 
         {/* User details */}
         <div className="mt-10">
-          {!session && <p> You&apos;re not Authenticated! </p>}
-
           {session && (
             <div>
               <p> {session.user?.name}</p>

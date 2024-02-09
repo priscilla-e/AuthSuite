@@ -70,7 +70,7 @@ For the Authorization callback URL field ente:
 
 ### 3. Define AuthOptions config file
 ```javascript
-// auth-options.ts
+// app/lib/auth-options.ts
 
 export const authOptions = {
   // Configure one or more authentication providers and or adapter
@@ -109,7 +109,7 @@ We will need a seperate client component to achieve this in Next 13 since we can
 
 Create a wrapper AuthProvider component as follows:
 
-```javascript
+```typescript
 // app/auth-provider.tsx
 
 "use client";
@@ -125,7 +125,7 @@ export default AuthProvider;
 
 Now add the custom auth provider to your root layout 
 
-```javascript
+```typescript
 // app/layout.tsx
 
 export default function RootLayout({
@@ -146,4 +146,26 @@ export default function RootLayout({
 
 
 
-### 6. Configure Adapters [Optional]
+### 6. Configure Adapters
+
+
+### 7. Protecting Routes using Middleware
+```typescript
+//middleware.ts
+export {default} from "next-auth/middleware";
+
+/* 
+Defined protected routes array for the middleware
+-----------------------------------------------
+You can also use wildcard to match rounds
+e.g. ['/user/*'] will match all routes that starts with /user/
+-----------------------------------------------
+// *: zero or more
+// ?: zero or one
+// +: one or more
+*/
+export const config = {
+  matcher:['/'] // here we protect only the homepage
+}
+
+```
