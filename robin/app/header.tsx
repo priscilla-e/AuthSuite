@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react"
 
 export default function Header() {
+  // this is how we access session on the client side
   const { data: session } = useSession();
 
   const handleSignOut = async () => {
