@@ -3,11 +3,11 @@
 Robin is a Next.js application that utilizes the NextAuth for authentication.
 
 Topics covered: 
-1. **Part 1 - Setting of NextAuth v4 with OAuth Providers (Google & Github)**
-2. **Part 2 -  Setting of NextAuth v4 with Credentials Provider**
+1. **Part 1 - Setting up NextAuth v4 with OAuth Providers (Google & Github)**
+2. **Part 2 -  Setting up NextAuth v4 with Credentials Provider**
 3. **Part 3 - Protecting Routes (Middleware)**
 
-## Part 1 -  Setting of NextAuth v4 with OAuth Providers!
+## Part 1 -  Setting up NextAuth v4 with OAuth Providers!
 
 As of February 5 2024, the NextAuth documentation is a hot mess! NextAuth is currently transitioning to Auth.js, so everything about it is a bit disorganized. The most common confusion is deciding whether to stick with the old NextAuth v4 or use the NextAuth v5@beta(or is it Auth.js now?) I'm still confused. I will be sticking with the old stable version (v4). 
 
@@ -276,7 +276,7 @@ npx prisma db push
 
 
 **Step 5: Create a Custom Prisma client insance**
-This ensure to avoid having too many prisma instances laying around on your application.
+This ensures we don't have too many Prisma Client instances laying around on your application.
 
 More information here: [Instantiating Prisma Client](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/instantiate-prisma-client)
 
@@ -417,11 +417,106 @@ export default function UserComponent() {
 
 ```
 
-## Part 2 - Setting of NextAuth v4 with Credentials Provider
+## Part 2 - Setting up NextAuth v4 with Credentials Provider
 
+In scenarios where you prefer or need to authenticate users using their email and password, or alongside OAuth providers, NextAuth offers a straightforward way to incorporate a Credentials Provider. This approach allows you to manage custom authentication flows within your Next.js application efficiently.
 
+### 1: Configure Credentials Provider in authOptions.ts
+Add the following to your authOptions.ts file
 TODO:
+```typescript
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
+import prisma from "@/app/lib/prisma";
 
+const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    // OAuth providers here...
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials, req) {
+        if (!credentials?.email || !credentials?.password) return null;
+
+        // Confirm user exists in the database
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
+        if (!user) return null;
+
+        // Confirm their password match using bcrypt
+        const passwordsMatch = await bcrypt.compare(
+          credentials.password,
+          user.hashedPassword!
+        );
+
+        return passwordsMatch ? user : null;
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/login", // intercepts the default signIn route (/api/auth/signin)
+  },
+  session: {
+    strategy: "jwt", // use JSON Web Tokens for session management, OAuth wont work without this
+  },
+};
+
+export default authOptions;
+
+```
+In this configuration, ensure you replace @/app/lib/prisma with the correct path to your Prisma client instance. The Credentials Provider uses bcrypt to verify the user's password against the hashed password stored in the database.
+
+### 2: Register new Users: Create Custom Registration Route
+
+For handling user registration, create an API route that registers new users. Ensure the email address is not already in use, hash the user's password, and then store the new user in the database:
+
+```typescript 
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/app/lib/prisma";
+import bcrypt from "bcrypt";
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+
+  // you could some data validation here with yup or zod, 
+  // we already did it in the client so i will skip it here
+  // ...
+
+  // see if the email is already in use
+  const user = await prisma.user.findUnique({
+    where: { email: body.email },
+  });
+
+  if (user)
+    return NextResponse.json(
+      { error: "Email already in use!" },
+      { status: 409 }
+    );
+
+    // hash user password and insert into the database
+  const hashedPassword = await bcrypt.hash(body.password, 10);
+
+  const newUser = await prisma.user.create({
+    data: {
+      name: body.name,
+      email: body.email,
+      hashedPassword,
+    },
+  });
+
+  // Don't send the hashed password back to the client
+  return NextResponse.json({name: newUser.name, email: newUser.email}, {status: 201})
+}
+```
 
 
 ## Part 3 - Protecting Routes (Middleware)
@@ -446,7 +541,7 @@ export const config = {
 ```
 
 
-## Resources
+## Useful Resources
 [NextAuth Course - Complete Authentication with Credentials, Goo](https://www.youtube.com/watch?v=t0Fs0NO78X8)
 
  [Setup Prisma And MongoDB With NextAuth](https://www.youtube.com/watch?v=JYcOAzs_Q4A)
