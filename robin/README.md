@@ -338,7 +338,7 @@ const authOptions: NextAuthOptions = {
 ### 7. Accessing Auth Session
 You can access the session from both server-side components and client-side components in Next.js.
 
-**Server Components and Routes:**
+**Server Components and Routes:**  
 To access the session in server components, you can use the `getServerSession`  function provided by NextAuth.
 
 Here's an example of it in action in Robin
@@ -375,7 +375,7 @@ export default async function Home() {
 
 ```
 
-**Client Components** 
+**Client Components:**  
 To access the session in client components, use the useSession hook provided by NextAuth. This hook allows you to access the current session and react to changes in authentication state.
 
 Code Example:
