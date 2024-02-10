@@ -2,13 +2,15 @@
 import styles from "../form.module.css";
 import Image from "next/image";
 import { HiAtSymbol, HiFingerPrint } from "react-icons/hi";
-import { useState } from "react";
+import {  useState } from "react";
 import { signIn } from "next-auth/react";
-import { useFormik } from "formik"
- import * as Yup from "yup";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues: {
@@ -16,25 +18,42 @@ export default function LoginForm() {
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email address").required("Email is required!"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required!"),
       password: Yup.string()
         .min(4, "Must be atleast 4 characters long!")
         .required("Password is required!"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values, {setStatus, setErrors, setSubmitting}) => {
+      // Sign in with credentials username and password
+      const response = await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+        callbackUrl: "/",
+      });
+      if (response?.error) {
+        setStatus({ error: "Invalid username or password" });
+      }
+      else {
+        // Auth Success: redirect user to dashboard
+        router.push("/");
+      }
     },
   });
 
-  const handleGoogleSignIn =  async () => {
-    signIn("google", { callbackUrl: "/"});
-  }
-  const handleGithubSignIn =  async () => {
-    signIn("github", { callbackUrl: "/"});
-  }
+  const handleGoogleSignIn = async () => {
+    signIn("google", { callbackUrl: "/" });
+  };
+  const handleGithubSignIn = async () => {
+    signIn("github", { callbackUrl: "/" });
+  };
 
   return (
     <form className="flex flex-col gap-5" onSubmit={formik.handleSubmit}>
+      <span className="text-rose-500 text-sm">{formik.status?.error ?? null }</span>
+
       <div className={styles.input_group}>
         <input
           id="email"
