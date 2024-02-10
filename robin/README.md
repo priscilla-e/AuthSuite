@@ -69,21 +69,24 @@ For the Authorization callback URL field ente:
 
 
 ### 3. Define AuthOptions config file
-```javascript
+```typescript
 // app/lib/auth-options.ts
 
 export const authOptions = {
   // Configure one or more authentication providers and or adapter
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
     // ...add more providers here
   ],
 }
 ```
-
 
 ### 4. Add API route handler (for Next.js App Router Only)
 
@@ -123,7 +126,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 export default AuthProvider;
 ```
 
-Now add the custom auth provider to your root layout 
+Now add the custom auth provider to your RootLayout.
 
 ```typescript
 // app/layout.tsx
@@ -144,9 +147,18 @@ export default function RootLayout({
 ```
 
 
+### 6. Configure Adapters 
+
+Adapters are essential for persisting OAuth user data and their session details inside your database once they log into your application.
+
+Next auth offers a wide range of adapters depending on your database engine or ORM. 
+
+https://next-auth.js.org/adapters
+
+For this application we will be using MongoDB Adapter together with Prisma ODM (ORM?)
 
 
-### 6. Configure Adapters
+
 
 
 ### 7. Protecting Routes using Middleware

@@ -18,6 +18,7 @@ const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
+    // Credentials Provider - for email/password login
     // CredentialsProvider({
     //   name: "Credentials",
     //   async authorize(credentials) {
@@ -27,7 +28,7 @@ const authOptions: NextAuthOptions = {
     
   ],
   pages: {
-    signIn: "/login", // intercept the default signIn route --- /api/auth/signin
+    signIn: "/login", // intercepts the default signIn route (/api/auth/signin)
   },
 };
 
