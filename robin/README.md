@@ -421,6 +421,12 @@ export default function UserComponent() {
 
 In scenarios where you prefer or need to authenticate users using their email and password, or alongside OAuth providers, NextAuth offers a straightforward way to incorporate a Credentials Provider. This approach allows you to manage custom authentication flows within your Next.js application efficiently.
 
+First we need to install bcrypt to encrypt user password 
+
+```bash
+npm i bcrypt
+```
+
 ### 1: Configure Credentials Provider in authOptions.ts
 Add the following to your authOptions.ts file
 TODO:
