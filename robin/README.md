@@ -425,6 +425,7 @@ First we need to install bcrypt to encrypt user password
 
 ```bash
 npm i bcrypt
+npm i -D @types/bcrypt
 ```
 
 ### 1: Configure Credentials Provider in authOptions.ts
