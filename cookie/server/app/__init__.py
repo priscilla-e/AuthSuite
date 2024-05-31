@@ -23,5 +23,7 @@ def register_extensions(flask_app):
     
 def register_blueprints(flask_app):
     from app.auth import auth_bp
+    from app.dashboard import dashboard_bp
     
-    flask_app.register_blueprint(auth_bp)
+    flask_app.register_blueprint(auth_bp, url_prefix='/auth')
+    flask_app.register_blueprint(dashboard_bp)
