@@ -13,9 +13,12 @@ def create_app():
 
 
 def register_extensions(flask_app):
-    from app.extensions import db
+    from app.extensions import db, login_manager, cors
     from app.models.user import User
-    
+
+    login_manager.init_app(flask_app)
+    cors.init_app(flask_app)
+
     with flask_app.app_context():
         db.init_app(flask_app)
         db.create_all()

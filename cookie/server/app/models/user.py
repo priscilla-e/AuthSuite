@@ -1,9 +1,10 @@
 from app.extensions import db
-from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
-class User(db.Model):
+
+class User(UserMixin, db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(unique=True)
     password_hash: Mapped[str] = mapped_column(nullable=False)
@@ -16,4 +17,3 @@ class User(db.Model):
         
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
-    

@@ -1,8 +1,18 @@
 from flask import request, session
-from werkzeug.security import check_password_hash
+from flask_login import login_required, login_user, logout_user
 from app.auth import auth_bp
 from app.models.user import User
-from app.extensions import db
+from app.extensions import db, login_manager
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return {"error": 'Unauthorized'}, 401
 
 
 @auth_bp.route('/register', methods=['POST'])
@@ -30,13 +40,15 @@ def login():
 
     user = User.query.filter_by(email=email).first()
     if user and user.check_password(password):
-        session['user_id'] = user.id  # Store user_id in the session
+        login_user(user)  # Log the user in
+        session.permanent = True
         return {'message': 'Login successful'}, 200
 
     return {'error': 'Invalid credentials'}, 401
 
 
 @auth_bp.route('/logout', methods=['POST'])
+@login_required
 def logout():
-    session.pop('user_id', None)
+    logout_user()
     return {'message': 'Logged out successfully'}, 200
