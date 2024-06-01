@@ -2,8 +2,6 @@
 
 In a traditional cookie-based session authentication strategy, the server maintains the session state and issues a session ID to the client, which is stored in a cookie. The client sends this cookie with each request to authenticate themselves. The server verifies the session ID and identifies the user.
 
-This Flask application demonstrates how to handle user authentication using sessions, Flask-Login, and SQLite. The server side is responsible for user registration, login, session management, and authentication. This guide focuses on the server-side implementation and how it deals with authentication.
-
      +-------------+                                +-------------+
      |             | 1. POST /login                 |             |
      |    Client   |------------------------------->|   Server    |
@@ -25,6 +23,10 @@ This Flask application demonstrates how to handle user authentication using sess
      |             |<-------------------------------|             |
      +-------------+                                +-------------+
 
+## Session Management in Flask
+
+By default, Flask uses secure cookies to store session data, meaning the data is stored client-side but signed with a secret key to prevent tampering.
+The session data is serialized, signed, and stored in the browser's cookies. This method ensures that the data cannot be modified by the client without invalidating the signature.
 
 ## Setup
 ### Requirements
