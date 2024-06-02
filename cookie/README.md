@@ -41,8 +41,7 @@ The session data is serialized, signed, and stored in the browser's cookies. Thi
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/your-repo/flask-auth-api.git
-    cd flask-auth-api
+    cd cookie
     ```
 
 2. **Create and activate a virtual environment**:

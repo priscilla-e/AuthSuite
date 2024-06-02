@@ -19,14 +19,15 @@ def login():
     token = jwt.encode(
         payload={
             'user': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=1)},
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=10)},
         key=current_app.config['SECRET_KEY'],
         algorithm='HS256')
 
     response = make_response({'message': "Login successful"})
 
-    # Set the token as a cookie in the response - httponly=True makes sure that the cookie is not accessible via JavaScript
-    # This is a security measure to prevent XSS attacks
+    # Set the token as a cookie in the response
+    # Flag httponly=True makes sure that the cookie is not accessible via JavaScript - to prevent XSS attacks
+    # Add flag secure=True - ensures that the cookie is only sent over HTTPS
     response.set_cookie('auth-token', token, httponly=True)
 
     return response
