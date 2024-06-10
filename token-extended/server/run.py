@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta, timezone
 from app import create_app
-from flask_jwt_extended import get_jwt, create_access_token, set_access_cookies, get_jwt_identity, current_user
+from flask_jwt_extended import get_jwt, create_access_token, set_access_cookies, current_user
 
 app = create_app()
 
@@ -13,7 +13,7 @@ def refresh_expiring_jwts(response):
     try:
         exp_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=1))
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=15))
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=current_user)
             set_access_cookies(response, access_token)
