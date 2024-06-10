@@ -34,7 +34,7 @@ def login():
         return {'error': 'Invalid credentials'}, 401
 
     access_token = create_access_token(identity=user)
-    response = jsonify({'message': 'login successful', 'access_token': access_token, 'user': user.to_dict()})
+    response = jsonify({'msg': 'Login successful', 'access_token': access_token, 'user': user.to_dict()})
     set_access_cookies(response, access_token)
 
     return response, 200
@@ -62,7 +62,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return {'message': 'User created successfully'}, 201
+    return {'msg': 'User created successfully'}, 201
 
 
 @auth_bp.route('/user', methods=['GET'])
