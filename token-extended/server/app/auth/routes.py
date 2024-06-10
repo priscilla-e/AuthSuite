@@ -1,5 +1,6 @@
 from flask import request, jsonify
-from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies, jwt_required
+from flask_jwt_extended import current_user
 from app.auth import auth_bp
 from app.models.user import User
 from app.extensions import db, jwt
@@ -33,13 +34,14 @@ def login():
         return {'error': 'Invalid credentials'}, 401
 
     access_token = create_access_token(identity=user)
-    response = jsonify({'message': 'login successful', 'access_token': access_token})
+    response = jsonify({'message': 'login successful', 'access_token': access_token, 'user': user.to_dict()})
     set_access_cookies(response, access_token)
 
     return response, 200
 
 
 @auth_bp.route('/logout', methods=['POST'])
+@jwt_required()
 def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
@@ -61,3 +63,9 @@ def register():
     db.session.commit()
 
     return {'message': 'User created successfully'}, 201
+
+
+@auth_bp.route('/user', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    return jsonify(current_user.to_dict())
