@@ -1,9 +1,13 @@
 import axios from 'axios';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 const axiosClient = axios.create({
-  baseURL: SERVER_URL || 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_SERVER_URL || 'http://localhost:5000',
+});
+
+axiosClient.interceptors.request.use((config) => {
+    config.withCredentials = true;
+    return config;
 });
 
 export default axiosClient;
