@@ -52,7 +52,10 @@ export default function AuthProvider({
 
         authApi
             .register(email, password)
-            .then(({ msg }) => console.log(msg))
+            .then(({ msg }) => {
+                console.log(msg);
+                navigate('/login');
+            })
             .catch((_error) => setError(_error))
             .finally(() => setLoading(false));
     }
