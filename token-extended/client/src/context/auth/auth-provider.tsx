@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import AuthContext from './auth-context';
 import { User } from '../../types';
 import * as authApi from '../../api/auth';
@@ -17,22 +17,22 @@ export default function AuthProvider({
 
     const navigate = useNavigate();
     const location = useLocation();
-  
+
     // Reset the error state if we change page
     useEffect(() => {
-      if (error) setError(undefined);
+        if (error) setError(undefined);
     }, [location.pathname]);
-  
 
     // Check if the user is logged in
     useEffect(() => {
         authApi
             .getCurrentUser()
-            .then((user) => setUser(user))
+            .then((user) => {
+                setUser(user);
+            })
             .catch((_error) => {})
             .finally(() => setLoadingInitial(false));
     }, []);
-
 
     function login(email: string, password: string) {
         setLoading(true);
@@ -43,7 +43,7 @@ export default function AuthProvider({
                 setUser(user);
                 navigate('/');
             })
-            .catch((_error) => setError(_error))
+            .catch((error) => setError(error))
             .finally(() => setLoading(false));
     }
 
@@ -56,20 +56,23 @@ export default function AuthProvider({
                 console.log(msg);
                 navigate('/login');
             })
-            .catch((_error) => setError(_error))
+            .catch((error) => setError(error))
             .finally(() => setLoading(false));
     }
 
     function logout() {
         authApi
             .logout()
-            .then(() => setUser(null))
-            .catch((_error) => console.log(_error));
+            .then(() => {
+                setUser(null);
+                navigate('/login');
+            })
+            .catch((error) => console.log(error));
     }
 
     const memoizedValue = useMemo(
         () => ({ user, loading, error, login, register, logout }),
-        [ user ]
+        [user]
     );
 
     if (loadingInitial) return <p>Loading...</p>;

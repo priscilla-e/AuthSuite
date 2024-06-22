@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { User } from "../../types";
+import { createContext } from 'react';
+import { User } from '../../types';
 
 interface AuthContextState {
     user: User | null;
@@ -16,7 +16,7 @@ const AuthContext = createContext<AuthContextState>({
     loading: false,
     login: () => {},
     register: () => {},
-    logout: () => {}
+    logout: () => {},
 });
 
 export default AuthContext;
