@@ -30,6 +30,6 @@ export async function register(email: string, password: string): Promise<{
 }
 
 export async function logout(): Promise<{msg: string}> {
-    const response = await axiosClient.post('/auth/logout')
+    const response = await axiosClient.delete('/auth/logout')
     return response.data
 }
