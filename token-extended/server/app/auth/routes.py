@@ -40,7 +40,7 @@ def login():
     return response, 200
 
 
-@auth_bp.route('/logout', methods=['POST'])
+@auth_bp.route('/logout', methods=['POST', 'DELETE'])
 @jwt_required()
 def logout():
     response = jsonify({"msg": "logout successful"})
