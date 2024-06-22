@@ -1,0 +1,3 @@
+FLASK_APP=runexit
+FLASK_ENV=development
+FLASK_DEBUG=True
