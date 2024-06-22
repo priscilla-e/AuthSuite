@@ -1,5 +1,8 @@
+import useAuth from "../hooks/useAuth"
 export default function Home() {
+    const { user } = useAuth();
+
     return (
-        <p>Home page</p>
+        <p>Welcome to the homepage {`${user}`}!</p>
     )
 }
