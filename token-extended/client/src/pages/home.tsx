@@ -3,6 +3,6 @@ export default function Home() {
     const { user } = useAuth();
 
     return (
-        <p>Welcome to the homepage {`${user}`}!</p>
+        <h1 className="text-4xl">Welcome to the homepage {`${user}`}!</h1>
     )
 }
